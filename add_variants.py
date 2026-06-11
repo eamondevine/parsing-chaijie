@@ -120,9 +120,6 @@ def main():
     with open("output.json", encoding="utf-8") as f:
         data = json.load(f)
 
-    # Set of all characters present in the dataset for variant filtering
-    all_chars = {entry["character"] for entry in data}
-
     formatted_entries = []
 
     for entry in data:
@@ -141,9 +138,9 @@ def main():
             official_stroke_number = actual_stroke_count
             has_mismatch = False
 
-        # ── Unihan variants, filtering self-references and chars not in dataset ─
-        trad_variants = [c for c in traditional_of.get(char, []) if c != char and c in all_chars]
-        simp_variants = [c for c in simplified_of.get(char, []) if c != char and c in all_chars]
+        # ── Unihan variants, filtering self-references ────────────────────────
+        trad_variants = [c for c in traditional_of.get(char, []) if c != char]
+        simp_variants = [c for c in simplified_of.get(char, []) if c != char]
 
         all_new_variant_chars = set(trad_variants + simp_variants)
 
