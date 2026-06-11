@@ -68,3 +68,7 @@ This is a sequential list of Kangxi radicals, all 214 of them.
 ## OFFICIAL_CHARACTERS.JSON
 
 This file's contents was derived from the 正字 table from the dict.variants.moe.tw website. If a character was present within their table, that character was provided as the value of the property of "officialChar". Then following that property is the "linkId", which can be tacked on to the URL *https://dict.variants.moe.edu.tw/dictView.jsp?ID=* to go to the associated entry for the character. Then the property "radical" gives the Taiwan MOE official radical for the character which is the priority for making values to radicals in the output.json file (after that the final radicals text file takes over filling in those values via the add variants python script). Finally we have the "strokeNumber" which again takes priority in labelling the stroke number in the output.json file.
+
+## STUPID-FUCKING-PHANTOMS.TXT
+
+This file is for going back and checking to see if there are any phantoms in these characters (because I started checking phantom components at character no 327 候). Show claude ai the README file in ChaiJieWeb and explain how to check for them and purePicts and any other cases.
