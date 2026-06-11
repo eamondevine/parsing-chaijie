@@ -49,7 +49,27 @@ def load_official(path="official_characters.json"):
     return {entry["officialChar"]: entry for entry in data}
 
 
-# ── Custom JSON formatter ─────────────────────────────────────────────────────
+# ── Load final_radicals.txt ───────────────────────────────────────────────────
+
+def load_final_radicals(path="final_radicals.txt"):
+    # Format: U+XXXX\tRadical
+    radicals = {}
+    with open(path, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            parts = line.split("\t")
+            if len(parts) < 2:
+                continue
+            codepoint, radical = parts[0], parts[1]
+            if codepoint.startswith("U+"):
+                try:
+                    char = chr(int(codepoint[2:], 16))
+                    radicals[char] = radical
+                except ValueError:
+                    pass
+    return radicals
 # Preserves your exact style:
 #   - 4-space indented objects
 #   - simple scalar properties on one line
@@ -95,6 +115,7 @@ def format_entry(obj, indent=4):
 def main():
     simplified_of, traditional_of = load_unihan("Unihan_Variants.txt")
     official = load_official("official_characters.json")
+    fallback_radicals = load_final_radicals("final_radicals.txt")
 
     with open("output.json", encoding="utf-8") as f:
         data = json.load(f)
@@ -169,6 +190,8 @@ def main():
                 # ── Radical — right after decomposition ──────────────────────
                 if official_entry:
                     final_entry["radical"] = official_entry["radical"]
+                elif char in fallback_radicals:
+                    final_entry["radical"] = fallback_radicals[char]
                 else:
                     final_entry["radical"] = entry.get("radical", "")
 
